@@ -19,7 +19,33 @@ const TeacherStudents = () => {
 
       {!loading && data ? (
         <div className="admin-card p-0 overflow-hidden">
-          <div className="overflow-x-auto">
+          <div className="grid gap-3 p-4 md:hidden">
+            {(data.students || []).length === 0 ? (
+              <div className="rounded-xl border border-gray-100 bg-white p-4 text-sm text-slate-500">
+                No students found for your class.
+              </div>
+            ) : null}
+            {(data.students || []).map((s) => (
+              <article key={s.Id} className="rounded-xl border border-emerald-100 bg-white p-4 shadow-sm">
+                <h3 className="break-words text-base font-bold text-slate-900">{s.StudentName || "-"}</h3>
+                <div className="mt-4 grid gap-3 text-sm">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Mobile</p>
+                    <p className="mt-1 break-words text-slate-800">{s.MobileNumber || "-"}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Email</p>
+                    <p className="mt-1 break-words text-slate-800">{s.Email || "-"}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Medium</p>
+                    <p className="mt-1 text-slate-800">{s.Medium || "-"}</p>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+          <div className="hidden overflow-x-auto md:block">
             <table className="w-full text-sm border-collapse">
               <thead className="admin-table-head">
                 <tr>

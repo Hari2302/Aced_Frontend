@@ -143,7 +143,34 @@ const TeacherHomework = () => {
               All active homework items published for your assigned class.
             </p>
           </div>
-          <div className="overflow-x-auto">
+          <div className="grid gap-3 p-4 md:hidden">
+            {loading ? (
+              <div className="rounded-xl border border-gray-100 bg-white p-4 text-sm text-slate-500">Loading...</div>
+            ) : null}
+            {!loading && homeworks.length === 0 ? (
+              <div className="rounded-xl border border-gray-100 bg-white p-4 text-sm text-slate-500">No homework found.</div>
+            ) : null}
+            {!loading
+              ? homeworks.map((a) => (
+                  <article key={a.Id} className="rounded-xl border border-emerald-100 bg-white p-4 shadow-sm">
+                    <h3 className="break-words text-base font-bold text-slate-900">{a.Title || "-"}</h3>
+                    <p className="mt-3 whitespace-pre-wrap break-words text-sm text-slate-700">{a.Description || "-"}</p>
+                    <div className="mt-4 flex items-center justify-between gap-3 border-t border-gray-100 pt-3">
+                      <HighlightDate value={a.DeadlineDate || a.DueDate} />
+                      <div className="flex items-center gap-2">
+                        <button type="button" className="admin-action-icon-btn is-edit" onClick={() => startEdit(a)} aria-label="Edit homework" title="Edit">
+                          <img src="/edit.svg" alt="" className="admin-action-icon" />
+                        </button>
+                        <button type="button" className="admin-action-icon-btn is-delete" onClick={() => handleDelete(a)} disabled={deletingId === a.Id} aria-label="Delete homework" title={deletingId === a.Id ? "Deleting" : "Delete"}>
+                          <img src="/delete.svg" alt="" className="admin-action-icon" />
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                ))
+              : null}
+          </div>
+          <div className="hidden overflow-x-auto md:block">
             <table className="w-full text-sm border-collapse">
               <thead className="admin-table-head">
                 <tr>

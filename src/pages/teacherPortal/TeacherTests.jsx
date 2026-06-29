@@ -466,7 +466,70 @@ const TeacherTests = () => {
           {error ? (
             <p className="mx-5 mt-4 text-sm text-red-700">{error}</p>
           ) : null}
-          <div className="overflow-x-auto">
+          <div className="grid gap-3 p-4 md:hidden">
+            {loading ? (
+              <div className="rounded-xl border border-gray-100 bg-white p-4 text-sm text-slate-500">
+                Loading...
+              </div>
+            ) : null}
+            {!loading && tests.length === 0 ? (
+              <div className="rounded-xl border border-gray-100 bg-white p-4 text-sm text-slate-500">
+                No tests found.
+              </div>
+            ) : null}
+            {!loading
+              ? tests.map((t) => (
+                  <article key={t.Id} className="rounded-xl border border-emerald-100 bg-white p-4 shadow-sm">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <h3 className="break-words text-base font-bold text-slate-900">
+                          {t.ExamName || "-"}
+                        </h3>
+                        <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-emerald-700">
+                          {t.TimeTakeMinutes ? `${t.TimeTakeMinutes} min` : "Duration -"}
+                        </p>
+                      </div>
+                      <HighlightDate value={t.ExamDate} />
+                    </div>
+
+                    <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                      <div className="col-span-2">
+                        <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Portion</p>
+                        <p className="mt-1 whitespace-pre-wrap break-words text-slate-800">{t.Portion || "-"}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Time</p>
+                        <p className="mt-1 text-slate-800">{formatTimeForDisplay(t.StartTime)} - {formatTimeForDisplay(t.EndTime)}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Marks</p>
+                        <p className="mt-1 font-semibold text-slate-900">{t.TotalMark ?? "-"}</p>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 flex flex-wrap items-center justify-end gap-2 border-t border-gray-100 pt-3">
+                      {getQuestionCount(t) > 0 ? (
+                        <button type="button" className="admin-action-icon-btn is-preview gap-1 text-sky-700" onClick={() => setQuestionPreview(t)} aria-label="View questions" title="View questions">
+                          <EyeIcon />
+                          <span className="text-xs font-bold">{getQuestionCount(t)}</span>
+                        </button>
+                      ) : null}
+                      <button type="button" className="admin-action-icon-btn is-preview gap-1 text-sky-700" onClick={() => openAttemptReview(t)} aria-label="View marks" title="View marks">
+                        <EyeIcon />
+                        <span className="text-xs font-bold">Marks</span>
+                      </button>
+                      <button type="button" className="admin-action-icon-btn is-edit" onClick={() => startEdit(t)} aria-label="Edit test" title={Number(t.AttemptCount || 0) > 0 ? "Cannot edit after student submission" : "Edit"} disabled={Number(t.AttemptCount || 0) > 0}>
+                        <img src="/edit.svg" alt="" className="admin-action-icon" />
+                      </button>
+                      <button type="button" className="admin-action-icon-btn is-delete" onClick={() => handleDelete(t)} disabled={deletingId === t.Id || Number(t.AttemptCount || 0) > 0} aria-label="Delete test" title={Number(t.AttemptCount || 0) > 0 ? "Cannot delete after student submission" : deletingId === t.Id ? "Deleting" : "Delete"}>
+                        <img src="/delete.svg" alt="" className="admin-action-icon" />
+                      </button>
+                    </div>
+                  </article>
+                ))
+              : null}
+          </div>
+          <div className="hidden overflow-x-auto md:block">
             <table className="w-full text-sm border-collapse">
               <thead className="admin-table-head">
                 <tr>

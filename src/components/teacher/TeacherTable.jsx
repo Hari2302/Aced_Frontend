@@ -72,7 +72,7 @@ const TeacherTable = ({
   }, [normalized, search, statusFilter, subjectFilter, classNameById]);
 
   return (
-    <div className="admin-card admin-card-hover admin-card-animate p-5" style={{ animationDelay: "180ms" }}>
+    <div className="admin-card admin-card-hover admin-card-animate p-4 sm:p-5" style={{ animationDelay: "180ms" }}>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
         <div>
           <h3 className="admin-title font-semibold text-lg text-gray-800">
@@ -103,7 +103,79 @@ const TeacherTable = ({
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-gray-100">
+
+      <div className="grid gap-3 md:hidden">
+        {filteredTeachers.length === 0 ? (
+          <div className="rounded-xl border border-gray-100 bg-white p-4 text-sm text-gray-500">
+            No teachers found for the selected filters.
+          </div>
+        ) : null}
+
+        {filteredTeachers.map((teacher) => (
+          <article key={teacher.id} className="rounded-xl border border-emerald-100 bg-white p-4 shadow-sm">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <h4 className="truncate text-base font-bold text-gray-900">
+                  {teacher.teacherName}
+                </h4>
+                <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-emerald-700">
+                  {teacher.subject}
+                </p>
+              </div>
+              <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-bold ${teacher.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                {teacher.isActive ? "Active" : "Inactive"}
+              </span>
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Class</p>
+                <p className="mt-1 text-slate-800">{classNameById[String(teacher.classId)] || "-"}</p>
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Blood</p>
+                <p className="mt-1 text-slate-800">{teacher.bloodGroup}</p>
+              </div>
+              <div className="col-span-2">
+                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Phone</p>
+                <p className="mt-1 break-words text-slate-800">{teacher.phoneNumber}</p>
+              </div>
+              <div className="col-span-2">
+                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Email</p>
+                <p className="mt-1 break-words text-slate-800">{teacher.email}</p>
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Salary</p>
+                <p className="mt-1 font-semibold text-slate-900">{formatCurrency(teacher.salary)}</p>
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Salary Status</p>
+                <p className={`mt-1 font-semibold ${teacher.isSalaryCredited ? "text-emerald-700" : "text-amber-700"}`}>
+                  {teacher.isSalaryCredited ? "Credited" : "Pending"}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4 flex flex-wrap items-center justify-end gap-2 border-t border-gray-100 pt-3">
+              <button type="button" onClick={() => onToggleSalary(teacher)} disabled={salaryToggleLoadingId === teacher.id} className={`rounded-lg px-3 py-2 text-xs font-bold disabled:opacity-60 ${teacher.isSalaryCredited ? "bg-rose-100 text-rose-700 hover:bg-rose-200" : "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"}`}>
+                {salaryToggleLoadingId === teacher.id
+                  ? "Updating..."
+                  : teacher.isSalaryCredited
+                    ? "Mark Pending"
+                    : "Mark Credited"}
+              </button>
+              <button type="button" onClick={() => onEdit(teacher)} className="admin-action-icon-btn is-edit" aria-label="Edit teacher" title="Edit">
+                <img src="/edit.svg" alt="" className="admin-action-icon" />
+              </button>
+              <button type="button" onClick={() => onDelete(teacher)} disabled={actionLoadingId === teacher.id} className="admin-action-icon-btn is-delete" aria-label="Delete teacher" title={actionLoadingId === teacher.id ? "Deleting" : "Delete"}>
+                <img src="/delete.svg" alt="" className="admin-action-icon" />
+              </button>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div className="hidden overflow-x-auto rounded-xl border border-gray-100 md:block">
         <table className="w-full text-sm border-collapse">
           <thead className="admin-table-head">
             <tr>

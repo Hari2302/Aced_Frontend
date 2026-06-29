@@ -112,6 +112,38 @@ body {
   padding: 0.45rem;
 }
 
+.admin-menu-icon {
+  position: relative;
+  display: inline-flex;
+  width: 1.15rem;
+  height: 1rem;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.admin-menu-icon span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  transition:
+    transform 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.admin-menu-icon.is-open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.admin-menu-icon.is-open span:nth-child(2) {
+  opacity: 0;
+}
+
+.admin-menu-icon.is-open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 .admin-close-icon {
   width: 1rem;
   height: 1rem;

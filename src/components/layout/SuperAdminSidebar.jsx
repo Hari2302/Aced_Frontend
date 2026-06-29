@@ -35,7 +35,7 @@ const SuperAdminSidebar = ({ isMobileOpen = false, onCloseMobile }) => {
         <button type="button" onClick={onCloseMobile} className="fixed inset-0 z-40 bg-black/40 md:hidden" aria-label="Close sidebar" />
       ) : null}
 
-      <aside className={`fixed inset-0 z-50 flex h-screen w-screen flex-col overflow-hidden border-r border-emerald-900/40 bg-gradient-to-b from-[#06281e] via-[#0b503a] to-[#072f23] p-5 text-white shadow-2xl shadow-emerald-950/40 transition-transform duration-200 md:fixed md:inset-y-0 md:left-0 md:w-72 md:p-6 ${isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}>
+      <aside className={`fixed inset-y-0 left-0 z-50 flex h-screen w-[min(74vw,18rem)] flex-col overflow-hidden border-r border-emerald-900/40 bg-gradient-to-b from-[#06281e] via-[#0b503a] to-[#072f23] p-5 text-white shadow-2xl shadow-emerald-950/40 transition-transform duration-200 md:fixed md:inset-y-0 md:left-0 md:w-72 md:p-6 ${isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}>
         <div className="mb-6 rounded-2xl border border-emerald-100/20 bg-white/10 p-4 backdrop-blur-sm">
           <p className="text-[10px] uppercase tracking-[0.2em] text-emerald-100/80">
             Super Admin

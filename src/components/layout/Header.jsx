@@ -42,8 +42,12 @@ const Header = () => {
           <button onClick={() => navigate("/admin/login", { state: { forceLogin: true } })} className="site-btn-primary text-sm px-4 py-2 hidden sm:inline-flex">
             Admin Login
           </button>
-          <button type="button" className="md:hidden admin-secondary-btn !px-3 !py-2" onClick={() => setIsMenuOpen(prev => !prev)}>
-            {isMenuOpen ? "Close" : "Menu"}
+          <button type="button" className="md:hidden admin-secondary-btn admin-icon-btn !px-3 !py-2" onClick={() => setIsMenuOpen(prev => !prev)} aria-label={isMenuOpen ? "Close Menu" : "Open Menu"} title={isMenuOpen ? "Close Menu" : "Open Menu"}>
+            <span className={`admin-menu-icon ${isMenuOpen ? "is-open" : ""}`} aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
           </button>
         </div>
       </div>

@@ -345,7 +345,64 @@ const StudentTests = () => {
       ) : null}
 
       {!loading && !error ? (
-        <div className="admin-card p-4 overflow-x-auto">
+        <div className="admin-card p-4">
+          <div className="grid gap-3 md:hidden">
+            {rows.length === 0 ? (
+              <div className="rounded-xl border border-gray-100 bg-white p-4 text-sm text-slate-500">
+                No exams available.
+              </div>
+            ) : null}
+            {rows.map((item) => (
+              <article key={item.id} className="rounded-xl border border-emerald-100 bg-white p-4 shadow-sm">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <h3 className="break-words text-base font-bold text-slate-900">{item.examName}</h3>
+                    <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-emerald-700">{item.className}</p>
+                  </div>
+                  <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-bold ${item.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                    {item.isActive ? "Active" : "Inactive"}
+                  </span>
+                </div>
+                <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Date</p>
+                    <p className="mt-1 text-slate-800">{formatDate(item.examDate)}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Time</p>
+                    <p className="mt-1 text-slate-800">{item.timeTakeMinutes} min</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Mark</p>
+                    <p className="mt-1 font-semibold text-slate-900">{item.totalMark}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Status</p>
+                    <p className="mt-1 font-semibold text-slate-900">{item.isSubmitted ? "Submitted" : "Pending"}</p>
+                  </div>
+                </div>
+                <div className="mt-4 flex flex-wrap items-center justify-end gap-2 border-t border-gray-100 pt-3">
+                  <button type="button" onClick={() => startAttempt(item.id)} className="admin-action-icon-btn is-edit" disabled={item.isSubmitted} aria-label="Attempt test" title={item.isSubmitted ? "Submitted" : "Attempt"}>
+                    <AttemptIcon />
+                  </button>
+                  {item.isSubmitted ? (
+                    <button type="button" onClick={() => handleViewSubmittedPdf(item.id, item.examName)} className="admin-action-icon-btn is-preview" aria-label="View submitted PDF" title="View submitted PDF">
+                      <PdfIcon />
+                    </button>
+                  ) : null}
+                  {item.isSubmitted ? (
+                    <button type="button" className={`admin-action-icon-btn ${item.gradedDate ? "bg-green-100 border-green-300 text-green-700" : "bg-red-100 border-red-300 text-red-700"}`} onClick={() => setMarkPreview(item)} aria-label="View mark" title={item.gradedDate ? "View mark" : "Mark pending"}>
+                      <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                        <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.8" />
+                      </svg>
+                    </button>
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </div>
+          <div className="hidden overflow-x-auto md:block">
           <table className="w-full text-sm border-collapse">
             <thead className="admin-table-head">
               <tr>
@@ -434,6 +491,7 @@ const StudentTests = () => {
               )}
             </tbody>
           </table>
+          </div>
         </div>
       ) : null}
 

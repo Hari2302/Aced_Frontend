@@ -88,7 +88,7 @@ const StudentTable = ({ students, onEdit, onDelete, actionLoadingId }) => {
   }, [genderFilter, modeFilter, normalized, search, statusFilter]);
 
   return (
-    <div className="admin-card admin-card-hover admin-card-animate p-5" style={{ animationDelay: "160ms" }}>
+    <div className="admin-card admin-card-hover admin-card-animate p-4 sm:p-5" style={{ animationDelay: "160ms" }}>
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-5">
         <div>
           <h3 className="admin-title font-semibold text-lg text-gray-800">
@@ -122,7 +122,78 @@ const StudentTable = ({ students, onEdit, onDelete, actionLoadingId }) => {
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-xl border border-gray-100">
+
+      <div className="grid gap-3 md:hidden">
+        {filteredStudents.length === 0 ? (
+          <div className="rounded-xl border border-gray-100 bg-white p-4 text-sm text-gray-500">
+            No students found for the selected filters.
+          </div>
+        ) : null}
+
+        {filteredStudents.map((student) => (
+          <article key={student.id} className="rounded-xl border border-emerald-100 bg-white p-4 shadow-sm">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <h4 className="truncate text-base font-bold text-gray-900">
+                  {student.studentName}
+                </h4>
+                <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-emerald-700">
+                  Class {student.classId}
+                </p>
+              </div>
+              <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-bold ${student.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                {student.isActive ? "Active" : "Inactive"}
+              </span>
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Mode</p>
+                <p className="mt-1 text-slate-800">{student.learningMode}</p>
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Medium</p>
+                <p className="mt-1 text-slate-800">{student.medium}</p>
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Gender</p>
+                <p className="mt-1 text-slate-800">{student.gender}</p>
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Blood</p>
+                <p className="mt-1 text-slate-800">{student.bloodGroup}</p>
+              </div>
+              <div className="col-span-2">
+                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Mobile</p>
+                <p className="mt-1 break-words text-slate-800">{student.mobileNumber}</p>
+              </div>
+              <div className="col-span-2">
+                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Email</p>
+                <p className="mt-1 break-words text-slate-800">{student.email}</p>
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Course</p>
+                <p className="mt-1 font-semibold text-slate-900">{formatCurrency(student.courseFees)}</p>
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-slate-400">Total</p>
+                <p className="mt-1 font-semibold text-slate-900">{formatCurrency(student.courseFees + student.hostelFees)}</p>
+              </div>
+            </div>
+
+            <div className="mt-4 flex items-center justify-end gap-2 border-t border-gray-100 pt-3">
+              <button type="button" onClick={() => onEdit(student)} className="admin-action-icon-btn is-edit" aria-label="Edit student" title="Edit">
+                <img src="/edit.svg" alt="" className="admin-action-icon" />
+              </button>
+              <button type="button" onClick={() => onDelete(student)} disabled={actionLoadingId === student.id} className="admin-action-icon-btn is-delete" aria-label="Delete student" title={actionLoadingId === student.id ? "Deleting" : "Delete"}>
+                <img src="/delete.svg" alt="" className="admin-action-icon" />
+              </button>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div className="hidden overflow-x-auto rounded-xl border border-gray-100 md:block">
         <table className="w-full text-sm border-collapse">
           <thead className="admin-table-head">
             <tr>
